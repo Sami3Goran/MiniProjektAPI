@@ -5,6 +5,7 @@ using MiniProjektAPI.Models;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text;
+using System.Net;
 
 namespace MiniProjektAPI
 {
@@ -131,7 +132,7 @@ namespace MiniProjektAPI
                     context.Person.Add(person);
                     context.SaveChanges();
 
-                    return Results.Created($"/new/person/{person.PersonId}", person);
+                    return Results.StatusCode((int)HttpStatusCode.Created);
                 }
                 else
                 {
@@ -150,12 +151,12 @@ namespace MiniProjektAPI
 
                     person.Interests.Add(interest);
                     context.SaveChanges();
-                    return Results.Created($"/person/{personId}/interest/{interest.InterestId}", person);
                 }
                 else
                 {
                     return Results.NotFound();
                 }
+                return Results.StatusCode((int)HttpStatusCode.Created);
             });
 
             //lägg till en ny länk till en perosn
@@ -182,8 +183,6 @@ namespace MiniProjektAPI
                                 });
 
                                 await context.SaveChangesAsync();
-
-                                return Results.Json($"Intreset link added {interestId} personID: {personId}.");
                             }
                             else
                             {
@@ -200,9 +199,8 @@ namespace MiniProjektAPI
                 {
                     return Results.NotFound();
                 }
+                return Results.StatusCode((int)HttpStatusCode.Created);
             });
-
-            
 
             app.Run();
         }
